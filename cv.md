@@ -4,7 +4,10 @@
 
 * I strive to help people by means of programming. I love not only the result but also the process of working. Ready for challenges
 
-* I can work on C++, JS, Python
+* I can work on 
+	* OCC++ 
+	* JS 
+	* Python
 
 * My latest development (which is being improved): generating content for the Vk group.
 
