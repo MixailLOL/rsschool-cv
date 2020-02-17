@@ -1,0 +1,32 @@
+body{
+	background-color: #E7F1D6;
+	margin-left: 2%;
+}
+
+h1{
+	text-align: center;
+}
+
+footer{
+	text-align: center;
+	border: 1px double #CEDAB8;
+	background-color: #E0F1C0; 
+}
+
+img{
+	float: right;
+	margin-right: 10%;
+}
+
+.code{
+	width: 100%;
+	float: center;
+	margin-top: 120px;
+}
+
+.undercode{
+	height: 100%;
+	margin-left: 10%;
+}
+
+

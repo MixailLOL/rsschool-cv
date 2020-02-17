@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+<title>Index</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header>
+ 		<h1>Mikhail Medved</h1>
+ 	</header>
+ 	<article >
+ 		<section class="undercode">
+ 		<img src ="photo.jpg" alt ="My photo" width="210" height="280">
+	 <p>I strive to help people by means of programming. I love not only the result but also the process of working. Ready for challenges</p>
+
+	 <p>I can work on </p>
+	 <ul>
+		 <li>OCC++ </li>
+		 <li>JS </li>
+		 <li>Python</li>
+	</ul>	 
+	 <p>My latest development (which is being improved): generating content for the Vk group.</p>
+	</section>
+	<section class="code">
+	<pre class="hljs" style="display: block; overflow-x: auto; padding: 0.5em; background: rgb(240, 240, 240); color: rgb(68, 68, 68);"><span class="hljs-keyword" style="font-weight: 700;">import</span> requests
+	<span class="hljs-keyword" style="font-weight: 700;">import</span> json
+	<span class="hljs-keyword" style="font-weight: 700;">import</span> urllib.request
+	<span class="hljs-keyword" style="font-weight: 700;">import</span> time
+	<span class="hljs-keyword" style="font-weight: 700;">from</span> time <span class="hljs-keyword" style="font-weight: 700;">import</span> sleep
+	<span class="hljs-keyword" style="font-weight: 700;">import</span> psutil
+	<span class="hljs-keyword" style="font-weight: 700;">from</span> clarifai.rest <span class="hljs-keyword" style="font-weight: 700;">import</span> ClarifaiApp
+
+	<span class="hljs-keyword" style="font-weight: 700;">while</span> <span class="hljs-keyword" style="font-weight: 700;">True</span>:
+		i = <span class="hljs-number" style="color: rgb(136, 0, 0);">0</span> 
+		app = ClarifaiApp(api_key=<span class="hljs-string" style="color: rgb(136, 0, 0);">'KEY'</span>)
+		token = <span class="hljs-string" style="color: rgb(136, 0, 0);">'token'</span>
+		group_id = group_id
+		H = time.strftime(<span class="hljs-string" style="color: rgb(136, 0, 0);">'%H'</span>)
+		M = time.strftime(<span class="hljs-string" style="color: rgb(136, 0, 0);">'%M'</span>)
+		pic_number = round((((int(H)*<span class="hljs-number" style="color: rgb(136, 0, 0);">60</span>+int(M))/<span class="hljs-number" style="color: rgb(136, 0, 0);">15</span>)+<span class="hljs-number" style="color: rgb(136, 0, 0);">1</span>))
+		flickr_url = <span class="hljs-string" style="color: rgb(136, 0, 0);">'https://api.flickr.com/services/rest/?method=flickr.interestingness.getList&amp;api_key=KEY&amp;per_page=300&amp;page=1&amp;format=json&amp;nojsoncallback=1'</span>
+
+		<span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">def</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">get_relevant_tegs</span><span class="hljs-params">(url)</span>:</span> 
+			response_data = app.tag_urls([url])
+			tag_urls = []
+			<span class="hljs-keyword" style="font-weight: 700;">for</span>  i  <span class="hljs-keyword" style="font-weight: 700;">in</span> range(<span class="hljs-number" style="color: rgb(136, 0, 0);">5</span>):
+				tag_urls.append(<span class="hljs-string" style="color: rgb(136, 0, 0);">'#'</span>+ response_data[<span class="hljs-string" style="color: rgb(136, 0, 0);">'outputs'</span>][<span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'data'</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'concepts'</span>][i][<span class="hljs-string" style="color: rgb(136, 0, 0);">'name'</span>])
+			<span class="hljs-keyword" style="font-weight: 700;">return</span> tag_urls
+
+		<span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">def</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">getFlickrPic</span><span class="hljs-params">()</span>:</span>
+			pic = requests.get(flickr_url).json()
+			<span class="hljs-comment" style="color: rgb(136, 136, 136);">#print(json.dumps(pic, indent=4, sort_keys=True))</span>
+			getSize = requests.get(<span class="hljs-string" style="color: rgb(136, 0, 0);">'https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&amp;api_key=03593667c94923eef10be7a5eca89b13&amp;photo_id='</span>+str(pic[<span class="hljs-string" style="color: rgb(136, 0, 0);">'photos'</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'photo'</span>][pic_number<span class="hljs-number" style="color: rgb(136, 0, 0);">-1</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'id'</span>])+<span class="hljs-string" style="color: rgb(136, 0, 0);">'&amp;format=json&amp;nojsoncallback=1'</span>).json()
+			<span class="hljs-keyword" style="font-weight: 700;">return</span> (str(getSize[<span class="hljs-string" style="color: rgb(136, 0, 0);">'sizes'</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'size'</span>][<span class="hljs-number" style="color: rgb(136, 0, 0);">8</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'source'</span>]))
+
+		<span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">def</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">getWallUploadServer</span><span class="hljs-params">()</span>:</span>
+			r = requests.get(<span class="hljs-string" style="color: rgb(136, 0, 0);">'https://api.vk.com/method/photos.getWallUploadServer?'</span>, params = {<span class="hljs-string" style="color: rgb(136, 0, 0);">'access_token'</span>:token,
+																					<span class="hljs-string" style="color: rgb(136, 0, 0);">'group_id'</span>:group_id,
+																					<span class="hljs-string" style="color: rgb(136, 0, 0);">'v'</span>:<span class="hljs-string" style="color: rgb(136, 0, 0);">'5.101'</span>}).json() 																															
+			<span class="hljs-keyword" style="font-weight: 700;">return</span> r[<span class="hljs-string" style="color: rgb(136, 0, 0);">'response'</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'upload_url'</span>]
+
+		<span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">def</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">save_r</span><span class="hljs-params">()</span>:</span>
+					save_result = requests.get(<span class="hljs-string" style="color: rgb(136, 0, 0);">'https://api.vk.com/method/photos.saveWallPhoto?'</span>, params ={<span class="hljs-string" style="color: rgb(136, 0, 0);">'access_token'</span>:token,
+																								<span class="hljs-string" style="color: rgb(136, 0, 0);">'group_id'</span>:group_id,
+																								<span class="hljs-string" style="color: rgb(136, 0, 0);">'photo'</span>:upload_response[<span class="hljs-string" style="color: rgb(136, 0, 0);">'photo'</span>],
+																								<span class="hljs-string" style="color: rgb(136, 0, 0);">'server'</span>:upload_response[<span class="hljs-string" style="color: rgb(136, 0, 0);">'server'</span>],
+																								<span class="hljs-string" style="color: rgb(136, 0, 0);">'hash'</span>:upload_response[<span class="hljs-string" style="color: rgb(136, 0, 0);">'hash'</span>],
+																								<span class="hljs-string" style="color: rgb(136, 0, 0);">'caption'</span>: caption,
+																								<span class="hljs-string" style="color: rgb(136, 0, 0);">'v'</span>:<span class="hljs-string" style="color: rgb(136, 0, 0);">'5.101'</span>}).json()
+					<span class="hljs-keyword" style="font-weight: 700;">return</span> (<span class="hljs-string" style="color: rgb(136, 0, 0);">'photo'</span>+str(save_result[<span class="hljs-string" style="color: rgb(136, 0, 0);">'response'</span>][<span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'owner_id'</span>])+<span class="hljs-string" style="color: rgb(136, 0, 0);">'_'</span>+str(save_result[<span class="hljs-string" style="color: rgb(136, 0, 0);">'response'</span>][<span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'id'</span>])+<span class="hljs-string" style="color: rgb(136, 0, 0);">'&amp;access_key='</span>+str(save_result[<span class="hljs-string" style="color: rgb(136, 0, 0);">'response'</span>][<span class="hljs-number" style="color: rgb(136, 0, 0);">0</span>][<span class="hljs-string" style="color: rgb(136, 0, 0);">'access_key'</span>]))
+
+		<span class="hljs-function"><span class="hljs-keyword" style="font-weight: 700;">def</span> <span class="hljs-title" style="color: rgb(136, 0, 0); font-weight: 700;">main</span><span class="hljs-params">()</span>:</span>
+			url = getFlickrPic()
+			img = urllib.request.urlopen(url).read()
+			out = open(str(pic_number)+<span class="hljs-string" style="color: rgb(136, 0, 0);">'.jpg'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'wb'</span>)
+			out.write(img)
+			out.close()
+			upload_url = getWallUploadServer()
+			file = {<span class="hljs-string" style="color: rgb(136, 0, 0);">'file1'</span>: open(str(pic_number)+<span class="hljs-string" style="color: rgb(136, 0, 0);">'.jpg'</span>, <span class="hljs-string" style="color: rgb(136, 0, 0);">'rb'</span>) }
+			<span class="hljs-keyword" style="font-weight: 700;">global</span> upload_response
+			<span class="hljs-keyword" style="font-weight: 700;">global</span> caption
+			caption =<span class="hljs-string" style="color: rgb(136, 0, 0);">' '</span>.join(get_relevant_tegs(url))
+			upload_response = requests.post(upload_url, files=file).json()
+			save_result = save_r()
+			result2 = requests.get(<span class="hljs-string" style="color: rgb(136, 0, 0);">'https://api.vk.com/method/wall.post?'</span>, params ={<span class="hljs-string" style="color: rgb(136, 0, 0);">'attachments'</span>:save_result,
+																					<span class="hljs-string" style="color: rgb(136, 0, 0);">'owner_id'</span>:-group_id,
+																					<span class="hljs-string" style="color: rgb(136, 0, 0);">'access_token'</span>:token,
+																					<span class="hljs-string" style="color: rgb(136, 0, 0);">'from_group'</span>: <span class="hljs-string" style="color: rgb(136, 0, 0);">'1'</span>,
+																					<span class="hljs-string" style="color: rgb(136, 0, 0);">'message'</span>: caption,
+																					<span class="hljs-string" style="color: rgb(136, 0, 0);">'v'</span>:<span class="hljs-string" style="color: rgb(136, 0, 0);">'5.101'</span>}).json()
+			print(pic_number,<span class="hljs-string" style="color: rgb(136, 0, 0);">'='</span>, result2, time.strftime(<span class="hljs-string" style="color: rgb(136, 0, 0);">'%H'</span>)+<span class="hljs-string" style="color: rgb(136, 0, 0);">':'</span>+time.strftime(<span class="hljs-string" style="color: rgb(136, 0, 0);">'%M'</span>))
+			sleep(<span class="hljs-number" style="color: rgb(136, 0, 0);">3600</span>)
+
+
+		<span class="hljs-keyword" style="font-weight: 700;">if</span> __name__ == <span class="hljs-string" style="color: rgb(136, 0, 0);">'__main__'</span>:
+			main()</pre>
+	</section>		
+	<section class="aftercode">
+	 <p>I haven't written anything serious yet</p>
+
+	 <p>Studying at Brest state technical University at the faculty of electronic information systems</p>
+
+	 <p>I have been studying English since school to this day</p>
+	</section>
+</article>
+<footer>
+	<h4>+375 33 387 2292      medvedztel7@gmail.com      https://vk.com/imbearmen</h4>
+</footer>	
+</body>
+</html>
